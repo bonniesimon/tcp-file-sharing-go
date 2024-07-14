@@ -1,11 +1,14 @@
 package main
 
 import (
-    "fmt"
-    "file-sharing/helper"
+	"fmt"
+	"net/http"
 )
 
 func main() {
-    result := helper.Add(2, 3) // Call the Add function from the helper package
-    fmt.Println(result)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Server is running!")
+	})
+
+	http.ListenAndServe(":3009", nil)
 }
