@@ -7,7 +7,7 @@
 - Other file sharing golang projects from github https://github.com/topics/file-sharing?l=go&o=desc&s=updated
 - Another implementation with selecting devices in local network https://github.com/varuuntiwari/share/blob/main/send/send.go
   - Maybe I can also implement this feature of selecting which device to send to.
-
+- Theory behind TCP server that clears a lot of my doubts https://youtu.be/f9gUFy-9uCM
 
 ### Logs
 
