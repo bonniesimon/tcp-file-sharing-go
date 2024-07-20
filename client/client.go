@@ -2,15 +2,16 @@ package main
 
 import (
 	"net"
+	"os"
 )
 
 func main() {
-	const serverAddress string = "127.0.0.1:3005"
+	const serverAddress string = ":3005"
 
 	conn, _ := net.Dial("tcp", serverAddress)
 	defer conn.Close()
 
-	var msg []byte = []byte{'c', 'a', 'k', 'e'}
+	message := os.Args[1]
 
-	conn.Write(msg)
+	conn.Write([]byte(message))
 }
