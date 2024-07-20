@@ -11,7 +11,14 @@ func main() {
 	conn, _ := net.Dial("tcp", serverAddress)
 	defer conn.Close()
 
-	message := os.Args[1]
+	data, err := os.ReadFile("tmp/send/file.txt")
+	if err != nil {
+		panic(err)
+	}
 
-	conn.Write([]byte(message))
+	_, err = conn.Write(data)
+
+	if err != nil {
+		panic(err)
+	}
 }

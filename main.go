@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net"
 	"os"
 )
@@ -28,11 +29,17 @@ func main() {
 
 		fmt.Printf("Connected to %s\n", address)
 
-		buf := make([]byte, 256)
+		received_data, err := io.ReadAll(conn)
+		if err != nil {
+			panic(err)
+		}
 
-		n, _ := conn.Read(buf)
+		err = os.WriteFile("tmp/receive/file.txt", received_data, 0644)
+		if err != nil {
+			panic(err)
+		}
 
-		fmt.Printf("Read %d bytes\n", n)
-		fmt.Printf("read the following data: %s\n", string(buf))
+		fmt.Printf("read the following data: %s\n", string(received_data))
+		fmt.Printf("Wrote to file tmp/receive/file.txt\n")
 	}
 }
