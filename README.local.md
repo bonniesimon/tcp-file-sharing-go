@@ -12,6 +12,11 @@
 
 ### Logs
 
+#### 21 July 2024
+- Today I want to be able to send files to the client based on filename requested by the client
+- I was recently thinking about the purpose of this software for me. Basically I can use this to send files from mac to windows or even my phone in the future.
+- Next step is to send the whole file instead of the first chunk. And also, I need to figure out how to handle the data in the client; like when do I stop receiving data. That should be based on the fileSize and the receivedData. I should send the fileSize from the server to the client and then also track the amount of data that I'm receiving. Then finally I can stop expecting more data when I know receivedData == fileSize.
+
 #### 20 July 2024
 - Todo today:
   - [x] Send a message through the TCP connection
