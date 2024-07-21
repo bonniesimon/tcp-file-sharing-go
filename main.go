@@ -7,8 +7,15 @@ import (
 	"os"
 )
 
+func check(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
 func main() {
 	const address string = ":3005"
+	const CHUNK_SIZE int = 2048
 
 	listener, err := net.Listen("tcp", address)
 
@@ -29,17 +36,39 @@ func main() {
 
 		fmt.Printf("Connected to %s\n", address)
 
-		received_data, err := io.ReadAll(conn)
-		if err != nil {
-			panic(err)
+		buffer := make([]byte, 1024)
+		n, err := conn.Read(buffer)
+		check(err)
+
+		fileName := string(buffer[:n])
+		fmt.Println("Read filename from client: ", fileName)
+
+		// fileInfo, _ := os.Stat(string(fileName))
+
+		// numberOfChunks := fileInfo.Size() / int64(CHUNK_SIZE)
+
+		buffer = make([]byte, CHUNK_SIZE)
+
+		file, err := os.OpenFile(string(fileName), os.O_RDWR, 0755)
+		check(err)
+
+		for {
+			n, err := file.Read(buffer)
+			if err != nil {
+				if err == io.EOF {
+					break
+				}
+				panic(err)
+			}
+
+			fmt.Printf("============================Buffer==============================\n%s\n=======================END==================\n", string(buffer[:n]))
+			fmt.Printf("Characters read: %d\n\n\n\n\n", n)
+
+			_, err = conn.Write(buffer[:n])
+			check(err)
+			break // We break here because I'm testing by sending only the first chunk of data
 		}
 
-		err = os.WriteFile("tmp/receive/file.txt", received_data, 0644)
-		if err != nil {
-			panic(err)
-		}
-
-		fmt.Printf("read the following data: %s\n", string(received_data))
-		fmt.Printf("Wrote to file tmp/receive/file.txt\n")
+		fmt.Printf("read the following data: %s\n", string(fileName))
 	}
 }

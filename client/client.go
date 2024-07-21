@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net"
 	"os"
 )
@@ -8,17 +9,25 @@ import (
 func main() {
 	const serverAddress string = ":3005"
 
-	conn, _ := net.Dial("tcp", serverAddress)
+	conn, err := net.Dial("tcp", serverAddress)
+	if err != nil {
+		panic(err)
+	}
 	defer conn.Close()
 
-	data, err := os.ReadFile("tmp/send/file.txt")
+	fileName := os.Args[1]
+
+	_, err = conn.Write([]byte(fileName))
 	if err != nil {
 		panic(err)
 	}
 
-	_, err = conn.Write(data)
+	buffer := make([]byte, 2048)
 
+	n, err := conn.Read(buffer)
 	if err != nil {
 		panic(err)
 	}
+
+	fmt.Printf("Bytes received: %d\n%s\n", n, string(buffer))
 }
